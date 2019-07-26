@@ -76,7 +76,7 @@ if [[ $USE_LEGION -eq 1 ]]; then
     make -C legion clean
 fi
 if [[ $USE_REGENT -eq 1 ]]; then
-    make -C regent clean
+    SHARD_SIZE=8 make -C regent clean
 fi
 if [[ $USE_REALM -eq 1 ]]; then
     make -C realm clean
@@ -107,9 +107,10 @@ if [[ $USE_REGENT -eq 1 ]]; then
         if [[ -n $CRAYPE_VERSION ]]; then
             export CC=gcc CXX=g++
         fi
-        SHARD_SIZE=30 make -C regent -j$THREADS
-        SHARD_SIZE=15 make -C regent -j$THREADS
-        SHARD_SIZE=14 make -C regent -j$THREADS
+        # SHARD_SIZE=30 make -C regent -j$THREADS
+        # SHARD_SIZE=15 make -C regent -j$THREADS
+        # SHARD_SIZE=14 make -C regent -j$THREADS
+        SHARD_SIZE=8 make -C regent -j$THREADS
     )
 fi
 if [[ $USE_LEGION -eq 1 ]]; then

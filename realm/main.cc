@@ -625,7 +625,8 @@ void shard_task(const void *args, size_t arglen, const void *userdata,
 
   // It's ok to use only a single scratch buffer because the tasks
   // will be effectively serialized on this processor.
-  char *scratch_ptr = reinterpret_cast<char *>(malloc(max_scratch_bytes));
+  char *scratch_ptr;
+  posix_memalign(reinterpret_cast<void **>(&scratch_ptr), 32, max_scratch_bytes);
   assert(scratch_ptr);
 
   // Statically allocate buffer to use for task input
