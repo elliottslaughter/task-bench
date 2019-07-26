@@ -628,6 +628,7 @@ void shard_task(const void *args, size_t arglen, const void *userdata,
   char *scratch_ptr;
   posix_memalign(reinterpret_cast<void **>(&scratch_ptr), 32, max_scratch_bytes);
   assert(scratch_ptr);
+  memset(scratch_ptr, 0xAB, max_scratch_bytes);
 
   // Statically allocate buffer to use for task input
   size_t leaf_bufsize = 0;
