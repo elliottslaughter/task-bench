@@ -73,7 +73,12 @@ if [[ $TASKBENCH_USE_HWLOC -eq 1 && -z $CI ]]; then
     popd
 fi
 
+(
 if [[ $USE_LEGION -eq 1 || $USE_PYGION -eq 1 ]]; then
+    if [[ $USE_PYGION -eq 1 ]]; then
+        source "$PYGION_DIR"/env.sh
+    fi
+
     pushd "$LEGION_DIR"
     if [[ ! -d build ]]; then
         mkdir build
@@ -82,7 +87,7 @@ if [[ $USE_LEGION -eq 1 || $USE_PYGION -eq 1 ]]; then
             -DCMAKE_INSTALL_PREFIX="$LEGION_DIR"/install
         )
         if [[ $USE_PYGION -eq 1 ]]; then
-            legion_cmake_flags=(
+            legion_cmake_flags+=(
                 -DLegion_BUILD_BINDINGS=ON
                 -DLegion_USE_Python=ON
             )
@@ -109,12 +114,13 @@ if [[ $USE_LEGION -eq 1 ]]; then
     popd
 fi
 if [[ $USE_PYGION -eq 1 ]]; then
-    (
-        source "$PYGION_DIR"/env.sh
-        make -C "$LEGION_DIR"/bindings/python -j$THREADS
-        make -C pygion -j$THREADS
-    )
+    mkdir -p pygion/build
+    pushd pygion/build
+    cmake .. -DLegion_ROOT="$LEGION_DIR"/install
+    make -j$THREADS
+    popd
 fi
+)
 
 (
 if [[ -n $CRAYPE_VERSION ]]; then
