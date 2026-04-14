@@ -25,7 +25,7 @@ jobs:
           - system: MPI
           - system: MPI_OPENMP
           - system: LEGION
-          # - system: PYGION
+          - system: PYGION
           - system: REGENT
           - system: REALM
           - system: STARPU
